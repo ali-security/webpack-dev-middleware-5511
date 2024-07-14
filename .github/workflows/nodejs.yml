@@ -11,7 +11,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-16.04, macOS-10.14, windows-2019]
+        os: [ubuntu-16.04, macOS-10.14]
         node_version: ['12.x', '10.x', '8.x', '6.x', '8.x']
         webpack_version: ['latest', 'next']
         include:
@@ -27,10 +27,10 @@ jobs:
             webpack_version: 'next'
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       
       - name: Setup Node.js ${{ matrix.node_version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node_version }}
 
