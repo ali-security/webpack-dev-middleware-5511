@@ -1,0 +1,52 @@
+name: Node.js CI
+
+on:
+  push:
+    branches:
+      - master
+      - next
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-16.04, macOS-10.14, windows-2019]
+        node_version: ['12.x', '10.x', '8.x', '6.x', '8.x']
+        webpack_version: ['latest', 'next']
+        include:
+          - node_version: '12.x'
+            webpack_version: 'latest'
+          - node_version: '10.x'
+            webpack_version: 'latest'
+          - node_version: '8.x'
+            webpack_version: 'latest'
+          - node_version: '6.x'
+            webpack_version: 'latest'
+          - node_version: '8.x'
+            webpack_version: 'next'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Setup Node.js ${{ matrix.node_version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node_version }}
+
+      - name: Install latest NPM
+        run: npm install -g npm@latest
+
+      - name: Print versions
+        run: |
+          node -v
+          npm -v
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install webpack ${{ matrix.webpack_version }}
+        run: npm install webpack@${{ matrix.webpack_version }}
+
+      - name: Run tests only
+        run: npm run test:only
